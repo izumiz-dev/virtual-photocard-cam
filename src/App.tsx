@@ -2,6 +2,14 @@ import { useState, useRef, useEffect, useCallback, useMemo, type ChangeEvent, ty
 
 import { Upload, Camera, Image } from 'lucide-react';
 
+// Window拡張の型定義
+declare global {
+  interface Window {
+    resizeTimeout?: number;
+    aspectRatioTimeout?: number;
+  }
+}
+
 const App = () => {
   // タブの状態管理
   const [activeTab, setActiveTab] = useState<'setup' | 'edit'>('setup');
@@ -150,7 +158,7 @@ const App = () => {
     canvas.style.height = `${Math.floor(displayHeight)}px`;
     
     // デバッグ用ログ（開発時のみ）
-    if (process.env.NODE_ENV === 'development') {
+    if (import.meta.env.DEV) {
       console.log('Canvas setup:', {
         containerSize: { width: containerWidth, height: containerHeight },
         displaySize: { width: displayWidth, height: displayHeight },
