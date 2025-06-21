@@ -114,17 +114,50 @@ const App = () => {
     const container = canvasContainerRef.current;
     if (!canvas || !container) return;
     
-    const containerWidth = container?.clientWidth || 0;
+    // コンテナの実際のサイズを取得（パディングを考慮）
+    const containerRect = container.getBoundingClientRect();
+    const containerWidth = containerRect.width;
+    const containerHeight = containerRect.height;
     const aspectRatio = getCurrentAspectRatio();
     
-    // アスペクト比に基づいてキャンバス設定
+    // 最小サイズを保証
+    const minSize = 200;
+    const maxWidth = Math.max(containerWidth, minSize);
+    const maxHeight = Math.max(containerHeight, minSize);
+    
+    // アスペクト比を維持しながら最適なサイズを計算
+    let displayWidth, displayHeight;
+    const targetWidth = maxWidth;
+    const targetHeight = targetWidth / aspectRatio;
+    
+    if (targetHeight <= maxHeight) {
+      // 幅基準でサイズを決定
+      displayWidth = targetWidth;
+      displayHeight = targetHeight;
+    } else {
+      // 高さ基準でサイズを決定
+      displayHeight = maxHeight;
+      displayWidth = displayHeight * aspectRatio;
+    }
+    
+    // キャンバスの内部解像度設定（固定解像度で安定性を優先）
     const baseWidth = 1080;
     canvas.width = baseWidth;
     canvas.height = Math.round(baseWidth / aspectRatio);
     
-    // コンテナに合わせてスタイル設定
-    canvas.style.width = `${containerWidth}px`;
-    canvas.style.height = `${containerWidth / aspectRatio}px`;
+    // キャンバスの表示サイズ設定
+    canvas.style.width = `${Math.floor(displayWidth)}px`;
+    canvas.style.height = `${Math.floor(displayHeight)}px`;
+    
+    // デバッグ用ログ（開発時のみ）
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Canvas setup:', {
+        containerSize: { width: containerWidth, height: containerHeight },
+        displaySize: { width: displayWidth, height: displayHeight },
+        canvasSize: { width: canvas.width, height: canvas.height },
+        aspectRatio
+      });
+    }
   }, [getCurrentAspectRatio]);
 
   // 背景画像の初期状態計算
@@ -354,12 +387,14 @@ const App = () => {
     if (mainImage && photocardImage) {
       setIsComposed(true);
       setActiveTab('edit'); // 合成後に編集タブに切り替え
-      // タブ切り替え後にキャンバスセットアップを実行
-      setTimeout(() => {
-        setupCanvas();
-        calculateInitialBgState();
-        calculateInitialCardState();
-      }, 100);
+      // requestAnimationFrameでタイミングを改善
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setupCanvas();
+          calculateInitialBgState();
+          calculateInitialCardState();
+        });
+      });
     }
   };
 
@@ -578,20 +613,30 @@ const App = () => {
   // アスペクト比変更時にキャンバスを再セットアップ
   useEffect(() => {
     if (isComposed && mainImage && photocardImage) {
-      setupCanvas();
-      calculateInitialBgState();
-      calculateInitialCardState();
+      // アスペクト比変更もデバウンス
+      clearTimeout(window.aspectRatioTimeout);
+      window.aspectRatioTimeout = setTimeout(() => {
+        setupCanvas();
+        calculateInitialBgState();
+        calculateInitialCardState();
+      }, 100);
     }
+    
+    return () => {
+      if (window.aspectRatioTimeout) {
+        clearTimeout(window.aspectRatioTimeout);
+      }
+    };
   }, [selectedAspectRatio, isComposed, mainImage, photocardImage, setupCanvas, calculateInitialBgState, calculateInitialCardState]);
 
   // 編集タブに切り替わったときにキャンバスを再セットアップ
   useEffect(() => {
     if (activeTab === 'edit' && isComposed && mainImage && photocardImage) {
-      setTimeout(() => {
+      requestAnimationFrame(() => {
         setupCanvas();
         calculateInitialBgState();
         calculateInitialCardState();
-      }, 50);
+      });
     }
   }, [activeTab, isComposed, mainImage, photocardImage, setupCanvas, calculateInitialBgState, calculateInitialCardState]);
 
@@ -625,9 +670,13 @@ const App = () => {
   useEffect(() => {
     const handleWindowResize = () => {
       if (mainImage && photocardImage && isComposed) {
-        setupCanvas();
-        calculateInitialBgState();
-        calculateInitialCardState();
+        // デバウンスでリサイズ処理を実行
+        clearTimeout(window.resizeTimeout);
+        window.resizeTimeout = setTimeout(() => {
+          setupCanvas();
+          calculateInitialBgState();
+          calculateInitialCardState();
+        }, 250); // デバウンス時間を延長
       }
     };
 
@@ -643,6 +692,11 @@ const App = () => {
       window.removeEventListener('mouseup', handleMouseUp);
       window.removeEventListener('touchmove', handleWindowTouchMove);
       window.removeEventListener('touchend', handleWindowTouchEnd);
+      
+      // タイマーのクリーンアップ
+      if (window.resizeTimeout) {
+        clearTimeout(window.resizeTimeout);
+      }
     };
   }, [mainImage, photocardImage, isComposed, isDragging, isPinching, dragTarget, bgDragAxis, dragStart, cardPos, bgImagePos, bgImageSize, cardSize, initialPinchDistance, initialPinchScale, pinchCenter, calculateInitialBgState, calculateInitialCardState, setupCanvas, handleMouseUp, handleWindowMouseMove, handleWindowTouchEnd, handleWindowTouchMove]);
 
@@ -823,13 +877,14 @@ const App = () => {
             <div className="flex-1 flex items-center justify-center p-4" style={{ minHeight: 0 }}>
               <div
                 ref={canvasContainerRef}
-                className="bg-gray-200 dark:bg-gray-700 rounded-lg shadow-inner flex items-center justify-center max-w-full max-h-full"
+                className="bg-gray-200 dark:bg-gray-700 rounded-lg shadow-inner flex items-center justify-center w-full h-full"
                 style={{ 
-                  aspectRatio: getCurrentAspectRatio(),
                   touchAction: 'none',
                   userSelect: 'none',
                   WebkitUserSelect: 'none',
-                  WebkitTouchCallout: 'none'
+                  WebkitTouchCallout: 'none',
+                  minWidth: '200px',
+                  minHeight: '200px'
                 }}
               >
                 <canvas
