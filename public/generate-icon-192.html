@@ -1,0 +1,39 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Icon Generator 192x192</title>
+</head>
+<body>
+    <canvas id="canvas" width="192" height="192"></canvas>
+    
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <rect width="192" height="192" fill="#6366f1" rx="24"/>
+  <text x="96" y="120" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="white" text-anchor="middle">CC</text>
+</svg>`;
+        const img = new Image();
+        
+        img.onload = function() {
+            ctx.drawImage(img, 0, 0, 192, 192);
+            
+            // ダウンロード
+            const link = document.createElement('a');
+            link.download = 'icon-192.png';
+            link.href = canvas.toDataURL('image/png');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            console.log('Icon 192x192 generated');
+        };
+        
+        const blob = new Blob([svg], {type: 'image/svg+xml'});
+        const url = URL.createObjectURL(blob);
+        img.src = url;
+    </script>
+</body>
+</html>
