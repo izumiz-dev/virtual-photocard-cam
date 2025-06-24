@@ -849,16 +849,20 @@ const App = () => {
                 
                 {/* プレビュー画像 */}
                 {mainImagePreview && (
-                  <div className="flex items-center mt-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                    <Image className="w-5 h-5 text-gray-400 mr-2" />
-                    <span className="text-sm text-gray-600 dark:text-gray-400 mr-3">選択済み:</span>
-                    <img
-                      src={mainImagePreview}
-                      className="w-16 h-16 object-cover rounded-md shadow-sm cursor-pointer hover:opacity-80 transition-opacity"
-                      alt="背景画像のプレビュー"
-                      onClick={() => setPreviewModal({ isOpen: true, src: mainImagePreview, title: '背景画像' })}
-                    />
-                    <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">タップで拡大</span>
+                  <div className="mt-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                    <div className="flex items-center mb-2">
+                      <Image className="w-5 h-5 text-gray-400 mr-2" />
+                      <span className="text-sm text-gray-600 dark:text-gray-400">選択済み</span>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <img
+                        src={mainImagePreview}
+                        className="w-20 h-20 object-cover rounded-md shadow-sm cursor-pointer hover:opacity-80 transition-opacity"
+                        alt="背景画像のプレビュー"
+                        onClick={() => setPreviewModal({ isOpen: true, src: mainImagePreview, title: '背景画像' })}
+                      />
+                      <span className="text-xs text-gray-500 dark:text-gray-400 mt-1">タップで拡大</span>
+                    </div>
                   </div>
                 )}
               </div>
@@ -874,54 +878,58 @@ const App = () => {
                   className="text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 dark:file:bg-indigo-900 file:text-indigo-700 dark:file:text-indigo-300 hover:file:bg-indigo-100 dark:hover:file:bg-indigo-800 transition-colors"
                 />
                 {photocardPreview && (
-                  <div className="flex items-center mt-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                    <span className="text-sm text-gray-600 dark:text-gray-400 mr-3">選択済み:</span>
-                    {/* ビニールスリーブコンテナ */}
-                    <div 
-                      className="relative inline-block cursor-pointer transition-transform duration-300 hover:scale-105"
-                      onClick={() => setPreviewModal({ isOpen: true, src: photocardPreview, title: 'フォトカード' })}
-                      style={{
-                        padding: '3px',
-                        background: 'rgba(240, 248, 255, 0.02)',
-                        borderRadius: '1px',
-                        border: '1px solid rgba(255, 255, 255, 0.15)',
-                        borderTopColor: 'rgba(255, 255, 255, 0.25)',
-                        boxShadow: '2px 3px 8px rgba(0, 0, 0, 0.3)'
-                      }}
-                    >
-                      {/* フォトカード本体 */}
-                      <img
-                        src={photocardPreview}
-                        className="block w-16 h-20 object-cover rounded-sm"
-                        alt="フォトカードのプレビュー"
-                        style={{
-                          boxShadow: '0 1px 2px rgba(0,0,0,0.3)'
-                        }}
-                      />
-                      {/* スリーブの光沢効果 ::before */}
-                      <div 
-                        className="absolute inset-0 pointer-events-none"
-                        style={{
-                          borderRadius: '1px',
-                          background: `
-                            linear-gradient(to bottom, rgba(0,0,0,0.12) 0%, transparent 3px),
-                            linear-gradient(
-                              130deg,
-                              transparent 35%,
-                              rgba(255, 255, 255, 0.2) 48%,
-                              rgba(255, 255, 255, 0.1) 52%,
-                              transparent 65%
-                            ),
-                            linear-gradient(
-                              -45deg,
-                              rgba(255, 255, 255, 0.1) 0%,
-                              rgba(255, 255, 255, 0.0) 60%
-                            )
-                          `
-                        }}
-                      />
+                  <div className="mt-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                    <div className="mb-2">
+                      <span className="text-sm text-gray-600 dark:text-gray-400">選択済み</span>
                     </div>
-                    <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">タップで拡大</span>
+                    <div className="flex items-start space-x-3">
+                      {/* ビニールスリーブコンテナ */}
+                      <div 
+                        className="relative inline-block cursor-pointer transition-transform duration-300 hover:scale-105"
+                        onClick={() => setPreviewModal({ isOpen: true, src: photocardPreview, title: 'フォトカード' })}
+                        style={{
+                          padding: '4px',
+                          background: 'rgba(240, 248, 255, 0.02)',
+                          borderRadius: '1px',
+                          border: '1px solid rgba(255, 255, 255, 0.15)',
+                          borderTopColor: 'rgba(255, 255, 255, 0.25)',
+                          boxShadow: '2px 3px 8px rgba(0, 0, 0, 0.3)'
+                        }}
+                      >
+                        {/* フォトカード本体 */}
+                        <img
+                          src={photocardPreview}
+                          className="block w-20 h-26 object-cover rounded-sm"
+                          alt="フォトカードのプレビュー"
+                          style={{
+                            boxShadow: '0 1px 2px rgba(0,0,0,0.3)'
+                          }}
+                        />
+                        {/* スリーブの光沢効果 ::before */}
+                        <div 
+                          className="absolute inset-0 pointer-events-none"
+                          style={{
+                            borderRadius: '1px',
+                            background: `
+                              linear-gradient(to bottom, rgba(0,0,0,0.12) 0%, transparent 4px),
+                              linear-gradient(
+                                130deg,
+                                transparent 35%,
+                                rgba(255, 255, 255, 0.2) 48%,
+                                rgba(255, 255, 255, 0.1) 52%,
+                                transparent 65%
+                              ),
+                              linear-gradient(
+                                -45deg,
+                                rgba(255, 255, 255, 0.1) 0%,
+                                rgba(255, 255, 255, 0.0) 60%
+                              )
+                            `
+                          }}
+                        />
+                      </div>
+                      <span className="text-xs text-gray-500 dark:text-gray-400 mt-1">タップで拡大</span>
+                    </div>
                   </div>
                 )}
               </div>
