@@ -729,14 +729,14 @@ const App = () => {
       {/* ヘッダー - デスクトップのみ表示 */}
       <header className="hidden md:block text-center py-4 px-4">
         <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent dark:from-indigo-400 dark:via-purple-400 dark:to-pink-400">
-          Virtual Photocard Cam
+          ✨ PhotoCard Magic Studio ✨
         </h1>
       </header>
       
       {/* モバイル向けタイトル */}
       <header className="md:hidden flex items-center justify-between py-4 px-4 bg-white dark:bg-gray-800 shadow-sm">
         <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent dark:from-indigo-400 dark:via-purple-400 dark:to-pink-400">
-          VirtualPC
+          ✨ PC Magic
         </h1>
         <div className="flex space-x-2">
           {/* 合成ボタン (モバイル) */}
@@ -746,7 +746,7 @@ const App = () => {
               disabled={!mainImage || !photocardImage}
               className="bg-indigo-600 text-white font-medium py-1.5 px-3 rounded-md hover:bg-indigo-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors text-sm"
             >
-              合成
+              ✨ 魔法
             </button>
           )}
           {/* 保存ボタン (モバイル) */}
@@ -755,7 +755,7 @@ const App = () => {
               onClick={handleDownload}
               className="bg-green-500 text-white font-medium py-1.5 px-3 rounded-md hover:bg-green-600 transition-colors text-sm"
             >
-              保存
+              💾 GET
             </button>
           )}
         </div>
@@ -772,7 +772,7 @@ const App = () => {
                 : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
             }`}
           >
-            画像選択
+            🎨 素材選択
           </button>
           <button
             onClick={() => setActiveTab('edit')}
@@ -785,7 +785,7 @@ const App = () => {
                 : 'border-transparent text-gray-300 dark:text-gray-600 cursor-not-allowed'
             }`}
           >
-            編集・調整
+            ✨ 魔法編集
           </button>
         </nav>
       </div>
@@ -798,7 +798,7 @@ const App = () => {
             <div className="max-w-lg mx-auto space-y-6">
               <div>
                 <label className="block text-lg font-semibold mb-3 text-gray-700 dark:text-gray-300">
-                  1. 背景画像を選択
+                  🌟 STEP1: 背景を選ぼう
                 </label>
                 
                 {/* 隠しファイル入力 */}
@@ -826,10 +826,10 @@ const App = () => {
                   >
                     <Upload className="w-8 h-8 text-indigo-500 dark:text-indigo-400 mb-2 group-hover:scale-110 transition-transform" />
                     <span className="text-sm font-medium text-gray-700 dark:text-gray-300 text-center">
-                      画像を選択
+                      📸 ギャラリー
                     </span>
                     <span className="text-xs text-gray-500 dark:text-gray-400 text-center mt-1">
-                      ギャラリーから
+                      写真を選ぶ
                     </span>
                   </button>
                   
@@ -839,10 +839,10 @@ const App = () => {
                   >
                     <Camera className="w-8 h-8 text-green-500 dark:text-green-400 mb-2 group-hover:scale-110 transition-transform" />
                     <span className="text-sm font-medium text-gray-700 dark:text-gray-300 text-center">
-                      画像を撮影
+                      📷 カメラ
                     </span>
                     <span className="text-xs text-gray-500 dark:text-gray-400 text-center mt-1">
-                      カメラで撮影
+                      今すぐ撮る
                     </span>
                   </button>
                 </div>
@@ -852,16 +852,16 @@ const App = () => {
                   <div className="mt-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                     <div className="flex items-center mb-2">
                       <Image className="w-5 h-5 text-gray-400 mr-2" />
-                      <span className="text-sm text-gray-600 dark:text-gray-400">選択済み</span>
+                      <span className="text-sm text-gray-600 dark:text-gray-400">🎯 READY!</span>
                     </div>
                     <div className="flex items-start space-x-3">
                       <img
                         src={mainImagePreview}
                         className="w-20 h-20 object-cover rounded-md shadow-sm cursor-pointer hover:opacity-80 transition-opacity"
-                        alt="背景画像のプレビュー"
-                        onClick={() => setPreviewModal({ isOpen: true, src: mainImagePreview, title: '背景画像' })}
+                        alt="🌅 背景プレビュー"
+                        onClick={() => setPreviewModal({ isOpen: true, src: mainImagePreview, title: '🌅 背景画像' })}
                       />
-                      <span className="text-xs text-gray-500 dark:text-gray-400 mt-1">タップで拡大</span>
+                      <span className="text-xs text-gray-500 dark:text-gray-400 mt-1">👆 タップで確認</span>
                     </div>
                   </div>
                 )}
@@ -869,7 +869,7 @@ const App = () => {
               
               <div>
                 <label className="block text-lg font-semibold mb-2 text-gray-700 dark:text-gray-300">
-                  2. フォトカードを選択
+                  🎴 STEP2: フォトカードを選ぼう
                 </label>
                 <input
                   type="file"
@@ -880,13 +880,13 @@ const App = () => {
                 {photocardPreview && (
                   <div className="mt-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                     <div className="mb-2">
-                      <span className="text-sm text-gray-600 dark:text-gray-400">選択済み</span>
+                      <span className="text-sm text-gray-600 dark:text-gray-400">🎯 READY!</span>
                     </div>
                     <div className="flex items-start space-x-3">
                       {/* ビニールスリーブコンテナ */}
                       <div 
                         className="relative inline-block cursor-pointer transition-transform duration-300 hover:scale-105"
-                        onClick={() => setPreviewModal({ isOpen: true, src: photocardPreview, title: 'フォトカード' })}
+                        onClick={() => setPreviewModal({ isOpen: true, src: photocardPreview, title: '✨ フォトカード' })}
                         style={{
                           padding: '4px',
                           background: 'rgba(240, 248, 255, 0.02)',
@@ -900,7 +900,7 @@ const App = () => {
                         <img
                           src={photocardPreview}
                           className="block w-20 h-26 object-cover rounded-sm"
-                          alt="フォトカードのプレビュー"
+                          alt="✨ フォトカードプレビュー"
                           style={{
                             boxShadow: '0 1px 2px rgba(0,0,0,0.3)'
                           }}
@@ -928,7 +928,7 @@ const App = () => {
                           }}
                         />
                       </div>
-                      <span className="text-xs text-gray-500 dark:text-gray-400 mt-1">タップで拡大</span>
+                      <span className="text-xs text-gray-500 dark:text-gray-400 mt-1">👆 タップで確認</span>
                     </div>
                   </div>
                 )}
@@ -936,7 +936,7 @@ const App = () => {
               
               <div>
                 <label className="block text-lg font-semibold mb-2 text-gray-700 dark:text-gray-300">
-                  3. アスペクト比を選択
+                  📐 STEP3: サイズを選ぼう
                 </label>
                 <select
                   value={selectedAspectRatio}
@@ -950,7 +950,7 @@ const App = () => {
                   ))}
                 </select>
                 <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                  生成される画像のアスペクト比を選択してください
+                  あなたの作品にぴったりのサイズを選んでね！✨
                 </p>
               </div>
               
@@ -960,7 +960,7 @@ const App = () => {
                   disabled={!mainImage || !photocardImage}
                   className="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-300 ease-in-out transform hover:scale-105"
                 >
-                  画像を合成する
+                  ✨ 魔法をかける！
                 </button>
               </div>
             </div>
@@ -1002,7 +1002,7 @@ const App = () => {
                     <svg xmlns="http://www.w3.org/2000/svg" className="w-12 h-12 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 002 2z"></path>
                     </svg>
-                    <p>合成された画像がここに表示されます</p>
+                    <p>✨ 魔法をかけた作品がここに現れます ✨</p>
                   </div>
                 )}
               </div>
@@ -1014,7 +1014,7 @@ const App = () => {
                 {/* フォトカードサイズスライダー - デスクトップのみ表示 */}
                 <div className="hidden md:block">
                   <label className="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">
-                    フォトカードサイズ: {zoomValue}%
+                    ✨ カードサイズ: {zoomValue}% ✨
                   </label>
                   <input
                     type="range"
@@ -1031,7 +1031,7 @@ const App = () => {
                     onClick={handleDownload}
                     className="w-full bg-green-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-300 ease-in-out transform hover:scale-105 hidden md:block"
                   >
-                    画像を保存
+                    💾 作品をGET！
                   </button>
                 )}
               </div>
