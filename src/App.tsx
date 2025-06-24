@@ -734,10 +734,31 @@ const App = () => {
       </header>
       
       {/* モバイル向けタイトル */}
-      <header className="md:hidden text-center py-3 px-4 bg-white dark:bg-gray-800 shadow-sm">
+      <header className="md:hidden flex items-center justify-between py-4 px-4 bg-white dark:bg-gray-800 shadow-sm">
         <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent dark:from-indigo-400 dark:via-purple-400 dark:to-pink-400">
           VirtualPC
         </h1>
+        <div className="flex space-x-2">
+          {/* 合成ボタン (モバイル) */}
+          {activeTab === 'setup' && (
+            <button
+              onClick={handleCompose}
+              disabled={!mainImage || !photocardImage}
+              className="bg-indigo-600 text-white font-medium py-1.5 px-3 rounded-md hover:bg-indigo-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors text-sm"
+            >
+              合成
+            </button>
+          )}
+          {/* 保存ボタン (モバイル) */}
+          {activeTab === 'edit' && isComposed && (
+            <button
+              onClick={handleDownload}
+              className="bg-green-500 text-white font-medium py-1.5 px-3 rounded-md hover:bg-green-600 transition-colors text-sm"
+            >
+              保存
+            </button>
+          )}
+        </div>
       </header>
       
       {/* タブナビゲーション */}
@@ -925,7 +946,7 @@ const App = () => {
                 </p>
               </div>
               
-              <div className="pt-4">
+              <div className="pt-4 hidden md:block">
                 <button
                   onClick={handleCompose}
                   disabled={!mainImage || !photocardImage}
@@ -1000,7 +1021,7 @@ const App = () => {
                 {isComposed && (
                   <button
                     onClick={handleDownload}
-                    className="w-full bg-green-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-300 ease-in-out transform hover:scale-105"
+                    className="w-full bg-green-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-300 ease-in-out transform hover:scale-105 hidden md:block"
                   >
                     画像を保存
                   </button>
