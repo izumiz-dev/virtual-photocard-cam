@@ -43,7 +43,7 @@ const App = () => {
   
   
   // アスペクト比選択状態
-  const [selectedAspectRatio, setSelectedAspectRatio] = useState<string>('4:5');
+  const [selectedAspectRatio, setSelectedAspectRatio] = useState<string>('3:4');
   
   // プレビューモーダル状態
   const [previewModal, setPreviewModal] = useState<{ isOpen: boolean; src: string; title: string }>({
@@ -60,18 +60,17 @@ const App = () => {
 
   // アスペクト比オプション
   const aspectRatioOptions = useMemo(() => [
-    { value: '4:5', label: '4:5', ratio: 4/5 },
+    { value: '9:16', label: '9:16', ratio: 9/16 },
+    { value: '3:4', label: '3:4', ratio: 3/4 },
     { value: '1:1', label: '1:1', ratio: 1/1 },
     { value: '4:3', label: '4:3', ratio: 4/3 },
-    { value: '16:9', label: '16:9', ratio: 16/9 },
-    { value: '9:16', label: '9:16', ratio: 9/16 },
-    { value: '21:9', label: '21:9', ratio: 21/9 }
+    { value: '16:9', label: '16:9', ratio: 16/9 }
   ], []);
 
   // 選択されたアスペクト比を取得
   const getCurrentAspectRatio = useCallback(() => {
     const selected = aspectRatioOptions.find(option => option.value === selectedAspectRatio);
-    return selected ? selected.ratio : 4/5;
+    return selected ? selected.ratio : 3/4;
   }, [selectedAspectRatio, aspectRatioOptions]);
 
   // 画像アップロード処理
