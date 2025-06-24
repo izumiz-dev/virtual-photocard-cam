@@ -1062,7 +1062,7 @@ const App = () => {
               </button>
             </div>
             <div className="p-4 flex justify-center items-center">
-              {previewModal.title === 'フォトカード' ? (
+              {previewModal.title === '✨ フォトカード' ? (
                 /* ビニールスリーブコンテナ */
                 <div 
                   className="relative inline-block mx-auto"
