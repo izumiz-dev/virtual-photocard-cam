@@ -5,8 +5,8 @@ import { Upload, Camera, Image } from 'lucide-react';
 // Window拡張の型定義
 declare global {
   interface Window {
-    resizeTimeout?: number;
-    aspectRatioTimeout?: number;
+    resizeTimeout?: ReturnType<typeof setTimeout>;
+    aspectRatioTimeout?: ReturnType<typeof setTimeout>;
   }
 }
 
