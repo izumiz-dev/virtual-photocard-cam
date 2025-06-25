@@ -51,6 +51,21 @@ const App = () => {
     src: '',
     title: ''
   });
+  
+  // 保存用モーダル状態
+  const [saveModal, setSaveModal] = useState<{ isOpen: boolean; imageUrl: string; filename: string }>({
+    isOpen: false,
+    imageUrl: '',
+    filename: ''
+  });
+  
+  // Tips表示用
+  const tips = [
+    '💡 Tips: フォトカードをドラッグして位置を調整',
+    '💡 Tips: 背景画像を上下左右にスライド',
+    '💡 Tips: 2本指でピンチしてカードサイズを調整'
+  ];
+  const [currentTip] = useState(() => tips[Math.floor(Math.random() * tips.length)]);
 
   // Refs
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -426,10 +441,16 @@ const App = () => {
       String(now.getMinutes()).padStart(2, '0') +
       String(now.getSeconds()).padStart(2, '0');
     
-    const link = document.createElement('a');
-    link.download = `photocard_${timestamp}.png`;
-    link.href = canvas.toDataURL('image/png');
-    link.click();
+    // JPEG形式で画像を生成
+    const imageUrl = canvas.toDataURL('image/jpeg', 0.9);
+    const filename = `photocard_${timestamp}.jpg`;
+    
+    // 保存用モーダルを開く
+    setSaveModal({
+      isOpen: true,
+      imageUrl,
+      filename
+    });
   };
 
   // Canvas座標変換
@@ -724,6 +745,7 @@ const App = () => {
     };
   }, [mainImage, photocardImage, isComposed, isDragging, isPinching, dragTarget, bgDragAxis, dragStart, cardPos, bgImagePos, bgImageSize, cardSize, initialPinchDistance, initialPinchScale, pinchCenter, calculateInitialBgState, calculateInitialCardState, setupCanvas, handleMouseUp, handleWindowMouseMove, handleWindowTouchEnd, handleWindowTouchMove]);
 
+
   return (
     <div className="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 h-screen overflow-hidden flex flex-col">
       {/* ヘッダー - デスクトップのみ表示 */}
@@ -746,7 +768,7 @@ const App = () => {
               disabled={!mainImage || !photocardImage}
               className="bg-indigo-600 text-white font-medium py-1.5 px-3 rounded-md hover:bg-indigo-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors text-sm"
             >
-              ✨ 魔法
+              ✨ 作成
             </button>
           )}
           {/* 保存ボタン (モバイル) */}
@@ -755,7 +777,7 @@ const App = () => {
               onClick={handleDownload}
               className="bg-green-500 text-white font-medium py-1.5 px-3 rounded-md hover:bg-green-600 transition-colors text-sm"
             >
-              💾 GET
+              ✨ 保存
             </button>
           )}
         </div>
@@ -772,7 +794,7 @@ const App = () => {
                 : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
             }`}
           >
-            🎨 素材選択
+            📷 素材選択
           </button>
           <button
             onClick={() => setActiveTab('edit')}
@@ -785,7 +807,7 @@ const App = () => {
                 : 'border-transparent text-gray-300 dark:text-gray-600 cursor-not-allowed'
             }`}
           >
-            ✨ 魔法編集
+            🎨 レイアウト編集
           </button>
         </nav>
       </div>
@@ -960,7 +982,7 @@ const App = () => {
                   disabled={!mainImage || !photocardImage}
                   className="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-300 ease-in-out transform hover:scale-105"
                 >
-                  ✨ 魔法をかける！
+                  ✨ 作成する！
                 </button>
               </div>
             </div>
@@ -974,7 +996,7 @@ const App = () => {
             <div className="flex-1 flex items-center justify-center p-4" style={{ minHeight: 0 }}>
               <div
                 ref={canvasContainerRef}
-                className="bg-gray-200 dark:bg-gray-700 rounded-lg shadow-inner flex items-center justify-center w-full h-full"
+                className="bg-gray-900 dark:bg-gray-950 rounded-lg shadow-inner flex items-center justify-center w-full h-full"
                 style={{ 
                   touchAction: 'none',
                   userSelect: 'none',
@@ -986,7 +1008,7 @@ const App = () => {
               >
                 <canvas
                   ref={canvasRef}
-                  className={`rounded-lg ${isComposed ? '' : 'hidden'} ${isDragging || isPinching ? 'cursor-grabbing' : 'cursor-grab'}`}
+                  className={`${isComposed ? '' : 'hidden'} ${isDragging || isPinching ? 'cursor-grabbing' : 'cursor-grab'}`}
                   style={{
                     touchAction: 'none',
                     userSelect: 'none',
@@ -1002,7 +1024,7 @@ const App = () => {
                     <svg xmlns="http://www.w3.org/2000/svg" className="w-12 h-12 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 002 2z"></path>
                     </svg>
-                    <p>✨ 魔法をかけた作品がここに現れます ✨</p>
+                    <p>✨ 作成した作品がここに表示されます ✨</p>
                   </div>
                 )}
               </div>
@@ -1031,10 +1053,17 @@ const App = () => {
                     onClick={handleDownload}
                     className="w-full bg-green-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-300 ease-in-out transform hover:scale-105 hidden md:block"
                   >
-                    💾 作品をGET！
+                    ✨ 作品を保存
                   </button>
                 )}
               </div>
+              
+              {/* Tips表示 - モバイルのみ */}
+              {currentTip && (
+                <p className="text-xs text-center text-gray-500 dark:text-gray-400 md:hidden mt-2">
+                  {currentTip}
+                </p>
+              )}
             </div>
           </div>
         )}
@@ -1115,6 +1144,84 @@ const App = () => {
                   className="max-w-full max-h-[70vh] object-contain mx-auto"
                 />
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 保存用モーダル */}
+      {saveModal.isOpen && (
+        <div 
+          className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4"
+          onClick={() => setSaveModal({ isOpen: false, imageUrl: '', filename: '' })}
+        >
+          <div 
+            className="relative max-w-4xl max-h-[90vh] bg-white dark:bg-gray-800 rounded-lg overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+              <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">✨ 作品を保存</h3>
+              <button
+                onClick={() => setSaveModal({ isOpen: false, imageUrl: '', filename: '' })}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="p-4 space-y-4">
+              {/* 保存方法の案内 */}
+              <div className="text-center">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-lg">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <p className="text-sm font-medium">
+                    {/iPhone|iPad|iPod/i.test(navigator.userAgent) || /Android/i.test(navigator.userAgent) ? (
+                      <span>📱 画像を長押しして「写真を保存」を選択してください</span>
+                    ) : (
+                      <span>💻 下のボタンからダウンロードするか、画像を右クリックして保存できます</span>
+                    )}
+                  </p>
+                </div>
+              </div>
+              
+              {/* PC用ダウンロードボタン */}
+              {!(/iPhone|iPad|iPod/i.test(navigator.userAgent) || /Android/i.test(navigator.userAgent)) && (
+                <div className="flex justify-center">
+                  <button
+                    onClick={() => {
+                      const link = document.createElement('a');
+                      link.download = saveModal.filename;
+                      link.href = saveModal.imageUrl;
+                      link.click();
+                      setSaveModal({ isOpen: false, imageUrl: '', filename: '' });
+                    }}
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-green-500 text-white font-medium rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-300 ease-in-out transform hover:scale-105"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    作品をダウンロード
+                  </button>
+                </div>
+              )}
+              
+              {/* 画像表示 */}
+              <div className="flex justify-center">
+                <img
+                  src={saveModal.imageUrl}
+                  alt="保存用画像"
+                  className="max-w-full max-h-[60vh] object-contain"
+                  style={{
+                    touchAction: 'none',
+                    WebkitTouchCallout: 'default',
+                    WebkitUserSelect: 'auto',
+                    userSelect: 'auto'
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>
